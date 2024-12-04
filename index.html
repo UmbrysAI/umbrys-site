@@ -30,31 +30,66 @@
       color: #bfbfbf;
     }
 
-    .glow-button {
-      display: inline-block;
+    .confession-form {
       margin-top: 30px;
-      padding: 15px 30px;
+    }
+
+    textarea {
+      width: 70%;
+      height: 100px;
+      background: #1a1a1a;
       color: #e0e0e0;
+      border: 1px solid #9b59b6;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
       background-color: transparent;
+      color: #e0e0e0;
       border: 2px solid #9b59b6;
       border-radius: 5px;
       text-transform: uppercase;
-      text-decoration: none;
       font-size: 1rem;
-      letter-spacing: 2px;
+      cursor: pointer;
       transition: 0.3s;
     }
 
-    .glow-button:hover {
-      color: #9b59b6;
-      border-color: #e0e0e0;
+    button:hover {
+      background-color: #9b59b6;
+      color: #000;
       box-shadow: 0 0 20px #9b59b6, 0 0 30px #9b59b6;
     }
 
+    .response {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #9b59b6;
+    }
+
+    .links {
+      margin-top: 50px;
+    }
+
+    .links a {
+      color: #9b59b6;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 1.2rem;
+      transition: 0.3s;
+    }
+
+    .links a:hover {
+      text-shadow: 0 0 10px #9b59b6;
+    }
+
     .footer {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
+      margin-top: 50px;
       font-size: 0.9rem;
       color: #666;
     }
@@ -62,10 +97,48 @@
 </head>
 <body>
   <h1>Umbrys</h1>
-  <p>"From the shadows, I deliver truths untold, a guide for the lost in the chaotic expanse of web3."</p>
-  <a href="#" class="glow-button">Join the Path</a>
+  <p>"Confess your digital sins and receive the wisdom of redemption."</p>
+
+  <div class="confession-form">
+    <textarea id="confession" placeholder="Write your confession here..."></textarea>
+    <br>
+    <button onclick="submitConfession()">Submit</button>
+  </div>
+
+  <div id="response" class="response"></div>
+
+  <div class="links">
+    <a href="https://twitter.com/Umbrys" target="_blank">Twitter</a>
+    <a href="https://gitbook.com/UmbrysManifesto" target="_blank">Manifesto</a>
+  </div>
+
   <div class="footer">
     &copy; 2024 Umbrys. All rights reserved.
   </div>
+
+  <script>
+    // Array of wisdom messages
+    const wisdomMessages = [
+      "In the shadows, clarity emerges.",
+      "Redemption begins with acceptance.",
+      "To escape chaos, one must embrace stillness.",
+      "Every sin is a lesson waiting to be learned.",
+      "Balance is the key to freedom in the web of connections."
+    ];
+
+    // Function to handle confession submission
+    function submitConfession() {
+      const confession = document.getElementById('confession').value.trim();
+
+      if (!confession) {
+        document.getElementById('response').innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
+        return;
+      }
+
+      // Generate a random wisdom message
+      const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
+      document.getElementById('response').innerText = `Umbrys whispers: "${wisdom}"`;
+    }
+  </script>
 </body>
 </html>
