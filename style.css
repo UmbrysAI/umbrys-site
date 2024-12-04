@@ -1,0 +1,8 @@
+@keyframes glow {
+  0% { text-shadow: 0 0 10px #9b59b6; }
+  50% { text-shadow: 0 0 20px #9b59b6; }
+  100% { text-shadow: 0 0 10px #9b59b6; }
+}
+h1 {
+  animation: glow 2s infinite;
+}
