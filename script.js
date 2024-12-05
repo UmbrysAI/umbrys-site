@@ -13,7 +13,7 @@ async function generateUmbrysResponse(confession) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer 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`, // Replace with your API key
+        "Authorization": `Bearer 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`, // Replace with your API key
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
