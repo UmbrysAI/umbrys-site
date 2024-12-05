@@ -21,6 +21,14 @@ header p {
   color: #bfbfbf;
 }
 
+/* Wall Title */
+.confession-wall-title h2 {
+  color: #e0e0e0;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #9b59b6;
+}
+
 /* Confession Form */
 .confession-form {
   margin-top: 30px;
@@ -73,11 +81,6 @@ button:hover {
 /* Confession Wall */
 .confession-wall {
   margin-top: 50px;
-}
-
-.confession-wall h2 {
-  color: #e0e0e0;
-  font-size: 2rem;
 }
 
 .confession {
