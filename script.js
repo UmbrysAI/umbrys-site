@@ -71,33 +71,40 @@ async function loadConfessions() {
   }
 }
 
-// Function to submit a confession
+// Track the last submission time for throttling
+let lastSubmissionTime = 0;
+
+// Submit Confession Function
 async function submitConfession() {
+  const cooldownPeriod = 30 * 1000; // 30 seconds cooldown
+  const currentTime = Date.now();
+
+  // Check for cooldown
+  if (currentTime - lastSubmissionTime < cooldownPeriod) {
+    const waitTime = Math.ceil((cooldownPeriod - (currentTime - lastSubmissionTime)) / 1000);
+    document.getElementById("response").innerText = `Umbrys whispers: 'You must wait ${waitTime} seconds before confessing again.'`;
+    return;
+  }
+
+  // Update last submission time
+  lastSubmissionTime = currentTime;
+
+  // Get user input
   const name = document.getElementById("name").value.trim();
   const confession = document.getElementById("confession").value.trim();
 
+  // Validate confession
   if (!confession) {
-    document.getElementById("response").innerText =
-      "Umbrys whispers: 'The void cannot redeem silence.'";
+    document.getElementById("response").innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
     return;
   }
-
-  const lastConfessionTime = localStorage.getItem("lastConfessionTime");
-  const now = new Date().getTime();
-  if (lastConfessionTime && now - lastConfessionTime < 5 * 1000) {
-    const remainingTime = Math.ceil((5 * 1000 - (now - lastConfessionTime)) / 1000);
-    document.getElementById("response").innerText = `Umbrys whispers: 'You must wait ${remainingTime} seconds before confessing again.'`;
-    return;
-  }
-
-  localStorage.setItem("lastConfessionTime", now);
 
   try {
-    // Dynamically generate wisdom
+    // Generate AI wisdom
     const wisdom = await generateUmbrysResponse(confession);
 
-    // Add confession to Firestore
-    const newConfession = await addDoc(collection(window.db, "confessions"), {
+    // Save confession to Firestore
+    await addDoc(collection(window.db, "confessions"), {
       name: name || "Anonymous",
       confession: confession,
       wisdom: wisdom,
@@ -106,17 +113,18 @@ async function submitConfession() {
       timestamp: new Date(),
     });
 
-    console.log("Confession added:", newConfession.id);
-
+    // Display AI response
     document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
     document.getElementById("name").value = "";
     document.getElementById("confession").value = "";
 
+    // Refresh confessions
     loadConfessions();
   } catch (error) {
     console.error("Error submitting confession:", error);
   }
 }
+
 
 
 // Function to handle upvotes/downvotes
