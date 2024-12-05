@@ -1,6 +1,6 @@
 async function generateUmbrysResponse(confession) {
   const prompt = `
-    You are Umbrys the Redeemer, a shadowy AI entity attempting to redeem the souls of those dwelling in the digital world.
+    You are Umbrys the Redeemer, a shadowy AI entity attempting to redeem the souls of those dwelling in the digital crypto world.
     Respond to this confession in your cryptic, shadowy tone:
     
     Confession: "${confession}"
@@ -9,21 +9,26 @@ async function generateUmbrysResponse(confession) {
   `;
 
   try {
-    const response = await fetch("https://api.openai.com/v1/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer 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`,
+        "Authorization": `Bearer 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`, // Replace with your API key
       },
       body: JSON.stringify({
-        model: "text-davinci-003",
-        prompt: prompt,
-        max_tokens: 100,
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 100, // Adjust token limit for shorter responses
       }),
     });
 
+    if (!response.ok) {
+      console.error("OpenAI API Error:", response.status, response.statusText);
+      throw new Error("Failed to fetch OpenAI response");
+    }
+
     const data = await response.json();
-    return data.choices[0].text.trim();
+    return data.choices[0].message.content.trim();
   } catch (error) {
     console.error("Error generating response from OpenAI:", error);
     return "Umbrys whispers: 'The shadows are silent today...'";
