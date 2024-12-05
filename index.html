@@ -41,12 +41,11 @@
 
   <!-- Firebase Initialization -->
   <script type="module">
-    // Import the functions you need from the SDKs you need
+    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-
-
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+  
+    // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBYToVDrDcTjB5xFPsAGi31_Ar9h90JHFM",
       authDomain: "umbrys-database.firebaseapp.com",
@@ -56,14 +55,23 @@
       appId: "1:382151152246:web:dd3b61060e7ed556658557",
       measurementId: "G-KH28SSHP6E"
     };
-
+  
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // Expose `db` globally so `script.js` can access it
+  
+    // Expose Firestore and helper functions globally
     window.db = db;
+    window.query = query;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.getDocs = getDocs;
+    window.orderBy = orderBy;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+    window.getDoc = getDoc;
   </script>
+
 
   <!-- Your Main JavaScript -->
   <script src="script.js"></script>
