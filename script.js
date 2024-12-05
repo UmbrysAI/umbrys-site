@@ -1,15 +1,4 @@
-// Test Firestore Connection
-async function testFirestore() {
-  try {
-    await window.db.collection("test").add({ test: "This is a test document." });
-    console.log("Test document added successfully.");
-  } catch (error) {
-    console.error("Error connecting to Firestore:", error);
-  }
-}
-
-testFirestore();
-
+import { collection, addDoc, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 // Restrict votes and confessions per user
 const userVotes = new Map();
@@ -24,20 +13,26 @@ async function loadConfessions() {
   const confessionWall = document.getElementById("confession-wall");
   confessionWall.innerHTML = ""; // Clear existing confessions
 
-  // Fetch confessions from Firestore, ordered by timestamp
-  const confessions = await window.db.collection("confessions").orderBy("timestamp", "desc").get();
-  confessions.forEach((doc) => {
-    const data = doc.data();
-    const confessionElement = document.createElement("div");
-    confessionElement.className = "confession";
-    confessionElement.innerHTML = `
-      <p><strong>${data.name || "Anonymous"}:</strong> ${data.confession}</p>
-      <p><strong>Umbrys says:</strong> ${data.wisdom}</p>
-      <button onclick="voteConfession(this, 'up', '${doc.id}')">Upvote <span>${data.upvotes || 0}</span></button>
-      <button onclick="voteConfession(this, 'down', '${doc.id}')">Downvote <span>${data.downvotes || 0}</span></button>
-    `;
-    confessionWall.appendChild(confessionElement);
-  });
+  try {
+    const q = query(collection(window.db, "confessions"), orderBy("timestamp", "desc"));
+    const querySnapshot = await getDocs(q);
+
+    console.log("Fetched confessions:", querySnapshot.docs.map((doc) => doc.data()));
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const confessionElement = document.createElement("div");
+      confessionElement.className = "confession";
+      confessionElement.innerHTML = `
+        <p><strong>${data.name || "Anonymous"}:</strong> ${data.confession}</p>
+        <p><strong>Umbrys says:</strong> ${data.wisdom}</p>
+        <button onclick="voteConfession(this, 'up', '${doc.id}')">Upvote <span>${data.upvotes || 0}</span></button>
+        <button onclick="voteConfession(this, 'down', '${doc.id}')">Downvote <span>${data.downvotes || 0}</span></button>
+      `;
+      confessionWall.appendChild(confessionElement);
+    });
+  } catch (error) {
+    console.error("Error fetching confessions:", error);
+  }
 }
 
 // Function to submit a confession
@@ -45,14 +40,12 @@ async function submitConfession() {
   const name = document.getElementById("name").value.trim();
   const confession = document.getElementById("confession").value.trim();
 
-  // Validation
   if (!confession) {
     document.getElementById("response").innerText =
       "Umbrys whispers: 'The void cannot redeem silence.'";
     return;
   }
 
-  // Restrict confessions to once every 5 seconds
   const lastConfessionTime = localStorage.getItem("lastConfessionTime");
   const now = new Date().getTime();
   if (lastConfessionTime && now - lastConfessionTime < 5 * 1000) {
@@ -61,10 +54,8 @@ async function submitConfession() {
     return;
   }
 
-  // Save the current time as the last confession time
   localStorage.setItem("lastConfessionTime", now);
 
-  // Generate random wisdom
   const wisdomMessages = [
     "In the shadows, clarity emerges.",
     "Redemption begins with acceptance.",
@@ -74,58 +65,50 @@ async function submitConfession() {
   ];
   const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
 
-  // Save confession to Firestore
-  console.log("window.db:", window.db); // Debugging: Check if db is defined
-  await window.db.collection("confessions").add({
-    name: "Test User",
-    confession: "Test confession.",
-    wisdom: "Test wisdom.",
-    upvotes: 0,
-    downvotes: 0,
-    timestamp: new Date(),
-  });
+  try {
+    const newConfession = await addDoc(collection(window.db, "confessions"), {
+      name: name || "Anonymous",
+      confession: confession,
+      wisdom: wisdom,
+      upvotes: 0,
+      downvotes: 0,
+      timestamp: new Date(),
+    });
 
+    console.log("Confession added:", newConfession.id);
 
-  // Show response
-  document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
+    document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
+    document.getElementById("name").value = "";
+    document.getElementById("confession").value = "";
 
-  // Clear form
-  document.getElementById("name").value = "";
-  document.getElementById("confession").value = "";
-
-  // Add the new confession to the wall without reloading
-  const confessionWall = document.getElementById("confession-wall");
-  const confessionElement = document.createElement("div");
-  confessionElement.className = "confession";
-  confessionElement.innerHTML = `
-    <p><strong>${name || "Anonymous"}:</strong> ${confession}</p>
-    <p><strong>Umbrys says:</strong> ${wisdom}</p>
-    <button onclick="voteConfession(this, 'up', '${newConfession.id}')">Upvote <span>0</span></button>
-    <button onclick="voteConfession(this, 'down', '${newConfession.id}')">Downvote <span>0</span></button>
-  `;
-  confessionWall.prepend(confessionElement);
+    loadConfessions();
+  } catch (error) {
+    console.error("Error submitting confession:", error);
+  }
 }
 
 // Function to handle upvotes/downvotes
 async function voteConfession(button, type, id) {
-  const docRef = window.db.collection("confessions").doc(id);
-  const confession = await docRef.get();
-  const data = confession.data();
+  const confessionDoc = doc(window.db, "confessions", id);
 
-  // Check if the user has already voted
-  if (userVotes.has(id)) {
-    alert("You can only vote once per confession.");
-    return;
+  try {
+    const confession = await getDoc(confessionDoc);
+    const data = confession.data();
+
+    if (userVotes.has(id)) {
+      alert("You can only vote once per confession.");
+      return;
+    }
+
+    const voteType = type === "up" ? "upvotes" : "downvotes";
+    const newVotes = (data[voteType] || 0) + 1;
+
+    await updateDoc(confessionDoc, { [voteType]: newVotes });
+
+    userVotes.set(id, true);
+
+    button.querySelector("span").innerText = newVotes;
+  } catch (error) {
+    console.error("Error updating vote:", error);
   }
-
-  // Update votes in Firestore
-  const voteType = type === "up" ? "upvotes" : "downvotes";
-  const newVotes = (data[voteType] || 0) + 1;
-  await docRef.update({ [voteType]: newVotes });
-
-  // Mark this confession as voted
-  userVotes.set(id, true);
-
-  // Update the UI
-  button.querySelector("span").innerText = newVotes;
 }
