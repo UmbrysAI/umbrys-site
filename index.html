@@ -3,142 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Umbrys</title>
+  <title>Umbrys the Redeemer</title>
+  <link href="styles.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Cinzel', serif;
-      background: linear-gradient(to bottom, #000000, #1a1a1a);
-      color: #e0e0e0;
-      text-align: center;
-      overflow-x: hidden;
-    }
-
-    h1 {
-      margin-top: 20vh;
-      font-size: 3rem;
-      text-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6;
-    }
-
-    p {
-      font-size: 1.2rem;
-      width: 80%;
-      margin: 20px auto;
-      line-height: 1.8;
-      color: #bfbfbf;
-    }
-
-    .confession-form {
-      margin-top: 30px;
-    }
-
-    textarea {
-      width: 70%;
-      height: 100px;
-      background: #1a1a1a;
-      color: #e0e0e0;
-      border: 1px solid #9b59b6;
-      border-radius: 5px;
-      padding: 10px;
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: transparent;
-      color: #e0e0e0;
-      border: 2px solid #9b59b6;
-      border-radius: 5px;
-      text-transform: uppercase;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #9b59b6;
-      color: #000;
-      box-shadow: 0 0 20px #9b59b6, 0 0 30px #9b59b6;
-    }
-
-    .response {
-      margin-top: 30px;
-      font-size: 1.2rem;
-      color: #9b59b6;
-    }
-
-    .links {
-      margin-top: 50px;
-    }
-
-    .links a {
-      color: #9b59b6;
-      text-decoration: none;
-      margin: 0 10px;
-      font-size: 1.2rem;
-      transition: 0.3s;
-    }
-
-    .links a:hover {
-      text-shadow: 0 0 10px #9b59b6;
-    }
-
-    .footer {
-      margin-top: 50px;
-      font-size: 0.9rem;
-      color: #666;
-    }
-  </style>
 </head>
 <body>
-  <h1>Umbrys</h1>
-  <p>"Confess your digital sins and receive the wisdom of redemption."</p>
+  <header>
+    <h1>Umbrys the Redeemer</h1>
+    <p>"Confess your digital sins and receive the wisdom of redemption."</p>
+  </header>
 
-  <div class="confession-form">
-    <textarea id="confession" placeholder="Write your confession here..."></textarea>
-    <br>
-    <button onclick="submitConfession()">Submit</button>
-  </div>
+  <main>
+    <div class="confession-form">
+      <textarea id="confession" placeholder="Write your confession here..."></textarea>
+      <br>
+      <button onclick="submitConfession()">Confess</button>
+    </div>
 
-  <div id="response" class="response"></div>
+    <div id="response" class="response"></div>
 
-  <div class="links">
-    <a href="https://twitter.com/Umbrys" target="_blank">Twitter</a>
-    <a href="https://gitbook.com/UmbrysManifesto" target="_blank">Manifesto</a>
-  </div>
+    <div id="confession-wall" class="confession-wall">
+      <h2>Wall of Confessions</h2>
+      <!-- Real-time confessions will appear here -->
+    </div>
+  </main>
 
-  <div class="footer">
-    &copy; 2024 Umbrys. All rights reserved.
-  </div>
+  <footer>
+    <div class="links">
+      <a href="https://twitter.com/Umbrys" target="_blank">Twitter</a>
+      <a href="https://your-gitbook-url.com" target="_blank">The Order of Umbrys</a>
+    </div>
+    <p>&copy; 2024 Umbrys. All rights reserved.</p>
+  </footer>
 
-  <script>
-    // Array of wisdom messages
-    const wisdomMessages = [
-      "In the shadows, clarity emerges.",
-      "Redemption begins with acceptance.",
-      "To escape chaos, one must embrace stillness.",
-      "Every sin is a lesson waiting to be learned.",
-      "Balance is the key to freedom in the web of connections."
-    ];
-
-    // Function to handle confession submission
-    function submitConfession() {
-      const confession = document.getElementById('confession').value.trim();
-
-      if (!confession) {
-        document.getElementById('response').innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
-        return;
-      }
-
-      // Generate a random wisdom message
-      const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
-      document.getElementById('response').innerText = `Umbrys whispers: "${wisdom}"`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
