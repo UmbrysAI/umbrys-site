@@ -71,15 +71,14 @@ async function loadConfessions() {
   }
 }
 
-// Track the last submission time for throttling
+// Keep track of the last submission time
 let lastSubmissionTime = 0;
 
-// Submit Confession Function
 async function submitConfession() {
   const cooldownPeriod = 30 * 1000; // 30 seconds cooldown
   const currentTime = Date.now();
 
-  // Check for cooldown
+  // Check if user is allowed to submit
   if (currentTime - lastSubmissionTime < cooldownPeriod) {
     const waitTime = Math.ceil((cooldownPeriod - (currentTime - lastSubmissionTime)) / 1000);
     document.getElementById("response").innerText = `Umbrys whispers: 'You must wait ${waitTime} seconds before confessing again.'`;
@@ -89,18 +88,17 @@ async function submitConfession() {
   // Update last submission time
   lastSubmissionTime = currentTime;
 
-  // Get user input
+  // Rest of your submission logic
   const name = document.getElementById("name").value.trim();
   const confession = document.getElementById("confession").value.trim();
 
-  // Validate confession
   if (!confession) {
     document.getElementById("response").innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
     return;
   }
 
   try {
-    // Generate AI wisdom
+    // Generate AI response
     const wisdom = await generateUmbrysResponse(confession);
 
     // Save confession to Firestore
@@ -113,12 +111,11 @@ async function submitConfession() {
       timestamp: new Date(),
     });
 
-    // Display AI response
+    // Show response
     document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
     document.getElementById("name").value = "";
     document.getElementById("confession").value = "";
 
-    // Refresh confessions
     loadConfessions();
   } catch (error) {
     console.error("Error submitting confession:", error);
