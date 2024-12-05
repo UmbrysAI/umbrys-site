@@ -75,14 +75,16 @@ async function submitConfession() {
   const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
 
   // Save confession to Firestore
-  const newConfession = await window.db.collection("confessions").add({
-    name: name || "Anonymous",
-    confession: confession,
-    wisdom: wisdom,
+  console.log("window.db:", window.db); // Debugging: Check if db is defined
+  await window.db.collection("confessions").add({
+    name: "Test User",
+    confession: "Test confession.",
+    wisdom: "Test wisdom.",
     upvotes: 0,
     downvotes: 0,
     timestamp: new Date(),
   });
+
 
   // Show response
   document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
