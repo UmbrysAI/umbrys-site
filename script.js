@@ -1,3 +1,16 @@
+// Test Firestore Connection
+async function testFirestore() {
+  try {
+    await window.db.collection("test").add({ test: "This is a test document." });
+    console.log("Test document added successfully.");
+  } catch (error) {
+    console.error("Error connecting to Firestore:", error);
+  }
+}
+
+testFirestore();
+
+
 // Restrict votes and confessions per user
 const userVotes = new Map();
 
