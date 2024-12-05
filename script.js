@@ -15,10 +15,22 @@ async function submitConfession() {
   const name = document.getElementById('name').value.trim();
   const confession = document.getElementById('confession').value.trim();
 
+  // Check posting restriction
+  const lastConfessionTime = localStorage.getItem('lastConfessionTime');
+  const now = new Date().getTime();
+  if (lastConfessionTime && now - lastConfessionTime < 5 * 60 * 1000) {
+    const remainingTime = Math.ceil((5 * 60 * 1000 - (now - lastConfessionTime)) / 1000);
+    document.getElementById('response').innerText = `Umbrys whispers: 'You must wait ${remainingTime} seconds before confessing again.'`;
+    return;
+  }
+
   if (!confession) {
     document.getElementById('response').innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
     return;
   }
+
+  // Save the current time as the last confession time
+  localStorage.setItem('lastConfessionTime', now);
 
   // Simulate AI Response (replace with actual API call later)
   const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
