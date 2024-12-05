@@ -1,75 +1,103 @@
-// Array of wisdom messages for testing
-const wisdomMessages = [
-  "In the shadows, clarity emerges.",
-  "Redemption begins with acceptance.",
-  "To escape chaos, one must embrace stillness.",
-  "Every sin is a lesson waiting to be learned.",
-  "Balance is the key to freedom in the web of connections."
-];
-
-// Store user votes to ensure one vote per user
+// Restrict votes and confessions per user
 const userVotes = new Map();
 
-// Function to handle confession submission
-async function submitConfession() {
-  const name = document.getElementById('name').value.trim();
-  const confession = document.getElementById('confession').value.trim();
+// Load confessions on page load
+window.onload = function () {
+  loadConfessions();
+};
 
-  // Check posting restriction
-  const lastConfessionTime = localStorage.getItem('lastConfessionTime');
-  const now = new Date().getTime();
-  if (lastConfessionTime && now - lastConfessionTime < 5 * 60 * 1000) {
-    const remainingTime = Math.ceil((5 * 60 * 1000 - (now - lastConfessionTime)) / 1000);
-    document.getElementById('response').innerText = `Umbrys whispers: 'You must wait ${remainingTime} seconds before confessing again.'`;
+// Function to load confessions from Firestore
+async function loadConfessions() {
+  const confessionWall = document.getElementById("confession-wall");
+  confessionWall.innerHTML = ""; // Clear existing confessions
+
+  // Fetch confessions from Firestore, ordered by timestamp
+  const confessions = await window.db.collection("confessions").orderBy("timestamp", "desc").get();
+  confessions.forEach((doc) => {
+    const data = doc.data();
+    const confessionElement = document.createElement("div");
+    confessionElement.className = "confession";
+    confessionElement.innerHTML = `
+      <p><strong>${data.name || "Anonymous"}:</strong> ${data.confession}</p>
+      <p><strong>Umbrys says:</strong> ${data.wisdom}</p>
+      <button onclick="voteConfession(this, 'up', '${doc.id}')">Upvote <span>${data.upvotes || 0}</span></button>
+      <button onclick="voteConfession(this, 'down', '${doc.id}')">Downvote <span>${data.downvotes || 0}</span></button>
+    `;
+    confessionWall.appendChild(confessionElement);
+  });
+}
+
+// Function to submit a confession
+async function submitConfession() {
+  const name = document.getElementById("name").value.trim();
+  const confession = document.getElementById("confession").value.trim();
+
+  // Validation
+  if (!confession) {
+    document.getElementById("response").innerText =
+      "Umbrys whispers: 'The void cannot redeem silence.'";
     return;
   }
 
-  if (!confession) {
-    document.getElementById('response').innerText = "Umbrys whispers: 'The void cannot redeem silence.'";
+  // Restrict confessions to once every 5 minutes
+  const lastConfessionTime = localStorage.getItem("lastConfessionTime");
+  const now = new Date().getTime();
+  if (lastConfessionTime && now - lastConfessionTime < 5 * 60 * 1000) {
+    const remainingTime = Math.ceil((5 * 60 * 1000 - (now - lastConfessionTime)) / 1000);
+    document.getElementById("response").innerText = `Umbrys whispers: 'You must wait ${remainingTime} seconds before confessing again.'`;
     return;
   }
 
   // Save the current time as the last confession time
-  localStorage.setItem('lastConfessionTime', now);
+  localStorage.setItem("lastConfessionTime", now);
 
-  // Simulate AI Response (replace with actual API call later)
+  // Generate random wisdom
+  const wisdomMessages = [
+    "In the shadows, clarity emerges.",
+    "Redemption begins with acceptance.",
+    "To escape chaos, one must embrace stillness.",
+    "Every sin is a lesson waiting to be learned.",
+    "Balance is the key to freedom in the web of connections.",
+  ];
   const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
-  
-  document.getElementById('response').innerText = `Umbrys whispers: "${wisdom}"`;
 
-  // Append confession to the wall
-  const confessionWall = document.getElementById('confession-wall');
-  const confessionElement = document.createElement('div');
-  confessionElement.className = 'confession';
-  confessionElement.innerHTML = `
-    <p><strong>${name || 'Anonymous'}:</strong> ${confession}</p>
-    <p><strong>Umbrys says:</strong> ${wisdom}</p>
-    <button onclick="voteConfession(this, 'up')">Upvote <span>0</span></button>
-    <button onclick="voteConfession(this, 'down')">Downvote <span>0</span></button>
-  `;
-  confessionWall.prepend(confessionElement);
+  // Save confession to Firestore
+  await window.db.collection("confessions").add({
+    name: name || "Anonymous",
+    confession: confession,
+    wisdom: wisdom,
+    upvotes: 0,
+    downvotes: 0,
+    timestamp: new Date(),
+  });
 
-  // Clear the form
-  document.getElementById('name').value = '';
-  document.getElementById('confession').value = '';
+  // Show response and clear form
+  document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
+  document.getElementById("name").value = "";
+  document.getElementById("confession").value = "";
+  loadConfessions();
 }
 
-// Function to handle voting (upvote or downvote)
-function voteConfession(button, type) {
-  const confessionElement = button.closest('.confession');
-  const confessionText = confessionElement.querySelector('p').innerText;
+// Function to handle upvotes/downvotes
+async function voteConfession(button, type, id) {
+  const docRef = window.db.collection("confessions").doc(id);
+  const confession = await docRef.get();
+  const data = confession.data();
 
-  // Check if the user has already voted on this confession
-  if (userVotes.has(confessionText)) {
+  // Check if the user has already voted
+  if (userVotes.has(id)) {
     alert("You can only vote once per confession.");
     return;
   }
 
-  // Mark the confession as voted
-  userVotes.set(confessionText, true);
+  // Update votes in Firestore
+  const voteType = type === "up" ? "upvotes" : "downvotes";
+  const newVotes = (data[voteType] || 0) + 1;
+  await docRef.update({ [voteType]: newVotes });
 
-  // Update vote count
-  const span = button.querySelector('span');
-  const currentVotes = parseInt(span.innerText);
-  span.innerText = type === 'up' ? currentVotes + 1 : currentVotes - 1;
+  // Mark this confession as voted
+  userVotes.set(id, true);
+
+  // Update the UI
+  button.querySelector("span").innerText = newVotes;
 }
