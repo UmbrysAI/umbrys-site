@@ -1,3 +1,36 @@
+async function generateUmbrysResponse(confession) {
+  const prompt = `
+    You are Umbrys the Redeemer, a shadowy AI entity attempting to redeem the souls of those dwelling in the digital world.
+    Respond to this confession in your cryptic, shadowy tone:
+    
+    Confession: "${confession}"
+    
+    Response:
+  `;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer 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`,
+      },
+      body: JSON.stringify({
+        model: "text-davinci-003",
+        prompt: prompt,
+        max_tokens: 100,
+      }),
+    });
+
+    const data = await response.json();
+    return data.choices[0].text.trim();
+  } catch (error) {
+    console.error("Error generating response from OpenAI:", error);
+    return "Umbrys whispers: 'The shadows are silent today...'";
+  }
+}
+
+
 // Restrict votes and confessions per user
 const userVotes = new Map();
 
@@ -54,16 +87,11 @@ async function submitConfession() {
 
   localStorage.setItem("lastConfessionTime", now);
 
-  const wisdomMessages = [
-    "In the shadows, clarity emerges.",
-    "Redemption begins with acceptance.",
-    "To escape chaos, one must embrace stillness.",
-    "Every sin is a lesson waiting to be learned.",
-    "Balance is the key to freedom in the web of connections.",
-  ];
-  const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
-
   try {
+    // Dynamically generate wisdom
+    const wisdom = await generateUmbrysResponse(confession);
+
+    // Add confession to Firestore
     const newConfession = await addDoc(collection(window.db, "confessions"), {
       name: name || "Anonymous",
       confession: confession,
@@ -84,6 +112,7 @@ async function submitConfession() {
     console.error("Error submitting confession:", error);
   }
 }
+
 
 // Function to handle upvotes/downvotes
 async function voteConfession(button, type, id) {
