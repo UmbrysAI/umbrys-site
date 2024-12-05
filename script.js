@@ -1,5 +1,3 @@
-import { collection, addDoc, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-
 // Restrict votes and confessions per user
 const userVotes = new Map();
 
