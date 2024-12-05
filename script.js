@@ -39,11 +39,11 @@ async function submitConfession() {
     return;
   }
 
-  // Restrict confessions to once every 5 minutes
+  // Restrict confessions to once every 5 seconds
   const lastConfessionTime = localStorage.getItem("lastConfessionTime");
   const now = new Date().getTime();
-  if (lastConfessionTime && now - lastConfessionTime < 5 * 60 * 1000) {
-    const remainingTime = Math.ceil((5 * 60 * 1000 - (now - lastConfessionTime)) / 1000);
+  if (lastConfessionTime && now - lastConfessionTime < 5 * 1000) {
+    const remainingTime = Math.ceil((5 * 1000 - (now - lastConfessionTime)) / 1000);
     document.getElementById("response").innerText = `Umbrys whispers: 'You must wait ${remainingTime} seconds before confessing again.'`;
     return;
   }
@@ -62,7 +62,7 @@ async function submitConfession() {
   const wisdom = wisdomMessages[Math.floor(Math.random() * wisdomMessages.length)];
 
   // Save confession to Firestore
-  await window.db.collection("confessions").add({
+  const newConfession = await window.db.collection("confessions").add({
     name: name || "Anonymous",
     confession: confession,
     wisdom: wisdom,
@@ -71,11 +71,24 @@ async function submitConfession() {
     timestamp: new Date(),
   });
 
-  // Show response and clear form
+  // Show response
   document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
+
+  // Clear form
   document.getElementById("name").value = "";
   document.getElementById("confession").value = "";
-  loadConfessions();
+
+  // Add the new confession to the wall without reloading
+  const confessionWall = document.getElementById("confession-wall");
+  const confessionElement = document.createElement("div");
+  confessionElement.className = "confession";
+  confessionElement.innerHTML = `
+    <p><strong>${name || "Anonymous"}:</strong> ${confession}</p>
+    <p><strong>Umbrys says:</strong> ${wisdom}</p>
+    <button onclick="voteConfession(this, 'up', '${newConfession.id}')">Upvote <span>0</span></button>
+    <button onclick="voteConfession(this, 'down', '${newConfession.id}')">Downvote <span>0</span></button>
+  `;
+  confessionWall.prepend(confessionElement);
 }
 
 // Function to handle upvotes/downvotes
