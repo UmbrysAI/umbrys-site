@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Umbrys the Redeemer</title>
+  <link href="styles.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Umbrys the Redeemer</h1>
+    <p>"Confess your digital sins and receive the wisdom of redemption."</p>
+  </header>
+
+  <main>
+    <div class="confession-wall-title">
+      <h2>Wall of Confessions</h2>
+    </div>
+    <div class="confession-form">
+      <input id="name" type="text" placeholder="Enter your name (optional)">
+      <textarea id="confession" placeholder="Write your confession here..."></textarea>
+      <br>
+      <button onclick="submitConfession()">Confess</button>
+    </div>
+
+    <div id="response" class="response"></div>
+
+    <div id="confession-wall" class="confession-wall">
+      <!-- Real-time confessions will appear here -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="links">
+      <a href="https://twitter.com/Umbrys" target="_blank">Twitter</a>
+      <a href="https://your-gitbook-url.com" target="_blank">The Order of Umbrys</a>
+    </div>
+    <p>&copy; 2024 Umbrys. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase Initialization -->
+  <script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+  
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBYToVDrDcTjB5xFPsAGi31_Ar9h90JHFM",
+      authDomain: "umbrys-database.firebaseapp.com",
+      projectId: "umbrys-database",
+      storageBucket: "umbrys-database.firebasestorage.app",
+      messagingSenderId: "382151152246",
+      appId: "1:382151152246:web:dd3b61060e7ed556658557",
+      measurementId: "G-KH28SSHP6E"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+  
+    // Expose Firestore and helper functions globally
+    window.db = db;
+    window.query = query;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.getDocs = getDocs;
+    window.orderBy = orderBy;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+    window.getDoc = getDoc;
+  </script>
+
+
+  <!-- Your Main JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
