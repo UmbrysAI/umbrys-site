@@ -9,17 +9,12 @@ async function generateUmbrysResponse(confession) {
   `;
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("http://localhost:3000/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer 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`, // Replace with your API key
       },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 100, // Adjust token limit for shorter responses
-      }),
+      body: JSON.stringify({ confession }),
     });
 
     if (!response.ok) {
@@ -28,13 +23,12 @@ async function generateUmbrysResponse(confession) {
     }
 
     const data = await response.json();
-    return data.choices[0].message.content.trim();
+    return data.response.trim();
   } catch (error) {
     console.error("Error generating response from OpenAI:", error);
     return "Umbrys whispers: 'The shadows are silent today...'";
   }
 }
-
 
 // Restrict votes and confessions per user
 const userVotes = new Map();
@@ -88,7 +82,6 @@ async function submitConfession() {
   // Update last submission time
   lastSubmissionTime = currentTime;
 
-  // Rest of your submission logic
   const name = document.getElementById("name").value.trim();
   const confession = document.getElementById("confession").value.trim();
 
@@ -111,7 +104,6 @@ async function submitConfession() {
       timestamp: new Date(),
     });
 
-    // Show response
     document.getElementById("response").innerText = `Umbrys whispers: "${wisdom}"`;
     document.getElementById("name").value = "";
     document.getElementById("confession").value = "";
@@ -121,8 +113,6 @@ async function submitConfession() {
     console.error("Error submitting confession:", error);
   }
 }
-
-
 
 // Function to handle upvotes/downvotes
 async function voteConfession(button, type, id) {
