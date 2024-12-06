@@ -1,13 +1,4 @@
 async function generateUmbrysResponse(confession) {
-  const prompt = `
-    You are Umbrys the Redeemer, a shadowy AI entity attempting to redeem the souls of those dwelling in the digital crypto world.
-    Respond to this confession in your cryptic, shadowy tone:
-    
-    Confession: "${confession}"
-    
-    Response:
-  `;
-
   try {
     const response = await fetch("http://localhost:3000/generate", {
       method: "POST",
@@ -18,17 +9,18 @@ async function generateUmbrysResponse(confession) {
     });
 
     if (!response.ok) {
-      console.error("OpenAI API Error:", response.status, response.statusText);
-      throw new Error("Failed to fetch OpenAI response");
+      console.error("Error from backend:", response.statusText);
+      return "Umbrys whispers: 'The shadows are silent today...'";
     }
 
     const data = await response.json();
     return data.response.trim();
   } catch (error) {
-    console.error("Error generating response from OpenAI:", error);
-    return "Umbrys whispers: 'The shadows are silent today...'";
+    console.error("Error generating response:", error);
+    return "Umbrys whispers: 'The void is unresponsive...'";
   }
 }
+
 
 // Restrict votes and confessions per user
 const userVotes = new Map();
