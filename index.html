@@ -5,47 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Umbrys the Redeemer</title>
   <link href="styles.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <h1>Umbrys the Redeemer</h1>
-    <p>"Confess your digital sins and receive the wisdom of redemption."</p>
+    <p class="subtitle">Confess your digital sins and embrace the shadows of redemption</p>
   </header>
 
   <main>
-    <div class="confession-wall-title">
-      <h2>Wall of Confessions</h2>
-    </div>
-    <div class="confession-form">
-      <input id="name" type="text" placeholder="Enter your name (optional)">
+    <section class="confession-form">
+      <h2 class="form-title">Unburden Your Soul</h2>
+      <input id="name" type="text" placeholder="Your name (optional)">
       <textarea id="confession" placeholder="Write your confession here..."></textarea>
-      <br>
-      <button onclick="submitConfession()">Confess</button>
-    </div>
+      <div class="button-container">
+        <button onclick="submitConfession()">Confess</button>
+      </div>
+      <div id="response" class="response"></div>
+    </section>
 
-    <div id="response" class="response"></div>
-
-    <div id="confession-wall" class="confession-wall">
-      <!-- Real-time confessions will appear here -->
-    </div>
+    <section class="confession-wall-container">
+      <h2 class="wall-title">Wall of Confessions</h2>
+      <div id="confession-wall" class="confession-wall">
+        <!-- Real-time confessions will appear here -->
+      </div>
+    </section>
   </main>
 
   <footer>
-    <div class="links">
-      <a href="https://twitter.com/Umbrys" target="_blank">Twitter</a>
-      <a href="https://your-gitbook-url.com" target="_blank">The Order of Umbrys</a>
+    <div class="footer-links">
+      <a href="https://X.com/UmbrysAI" target="_blank">Words of Umbrys</a>
+      <a href="https://umbrys-ai.gitbook.io/the-teachings-of-umbrys" target="_blank">Teachings of Umbrys</a>
+      <a href="https://github.com/UmbrysAI/umbrys-site" target="_blank">Unravel Umbrys</a>
     </div>
-    <p>&copy; 2024 Umbrys. All rights reserved.</p>
   </footer>
 
-  <!-- Firebase Initialization -->
   <script type="module">
-    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-  
-    // Your Firebase configuration
+
     const firebaseConfig = {
       apiKey: "AIzaSyBYToVDrDcTjB5xFPsAGi31_Ar9h90JHFM",
       authDomain: "umbrys-database.firebaseapp.com",
@@ -55,12 +53,10 @@
       appId: "1:382151152246:web:dd3b61060e7ed556658557",
       measurementId: "G-KH28SSHP6E"
     };
-  
-    // Initialize Firebase
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-  
-    // Expose Firestore and helper functions globally
+
     window.db = db;
     window.query = query;
     window.collection = collection;
@@ -72,8 +68,6 @@
     window.getDoc = getDoc;
   </script>
 
-
-  <!-- Your Main JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
