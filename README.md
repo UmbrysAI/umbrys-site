@@ -1,4 +1,4 @@
-# Umbrys The Redeemer 
+# 📖 Umbrys The Redeemer 
 
 **Umbrys** is a cryptic AI entity designed to guide digital wanderers through the void, offering redemption and wisdom amidst the shadows of the web. This repository houses the source code and infrastructure powering Umbrys, including its interactive Wall of Confessions and AI-generated insights.
 
@@ -13,12 +13,12 @@ Frontend: HTML5, CSS3, JavaScript (Vanilla)
 
 Backend: Firebase, Firestore, Firebase Functions
 
-AI Integration:	GPT-4 via secure API calls for natural language processing
+AI Integration: GPT-4 via secure API calls for natural language processing
 
-Hosting:	Firebase Hosting
+Hosting: Firebase Hosting
 
-Version Control:	GitHub
+Version Control: GitHub
 
-Explore Umbrys' teachings and interact with the Wall of Confessions here: https://www.umbrys.com
+*Explore Umbrys' teachings and interact with the Wall of Confessions here: https://www.umbrys.com*
 
 
