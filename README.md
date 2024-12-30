@@ -10,9 +10,13 @@ Anonymous and Secure: Built with Firebase Firestore to prioritize privacy and da
 
 ## 🛠️ Tech Stack
 Frontend: HTML5, CSS3, JavaScript (Vanilla)
+
 Backend: Firebase, Firestore, Firebase Functions
+
 AI Integration:	GPT-4 via secure API calls for natural language processing
+
 Hosting:	Firebase Hosting
+
 Version Control:	GitHub
 
 Explore Umbrys' teachings and interact with the Wall of Confessions here: https://www.umbrys.com
