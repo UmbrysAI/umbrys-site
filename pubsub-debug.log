@@ -1,0 +1,34 @@
+
+C:\users\jorda\desktop\ubackend\functions>if "Windows_NT" == "Windows_NT" setlocal
+
+C:\users\jorda\desktop\ubackend\functions>set DIRNAME=C:\Users\Jorda\.cache\firebase\emulators\pubsub-emulator-0.8.14\pubsub-emulator\bin\ 
+
+C:\users\jorda\desktop\ubackend\functions>if "C:\Users\Jorda\.cache\firebase\emulators\pubsub-emulator-0.8.14\pubsub-emulator\bin\" == "" set DIRNAME=. 
+
+C:\users\jorda\desktop\ubackend\functions>set APP_BASE_NAME=cloud-pubsub-emulator 
+
+C:\users\jorda\desktop\ubackend\functions>set APP_HOME=C:\Users\Jorda\.cache\firebase\emulators\pubsub-emulator-0.8.14\pubsub-emulator\bin\.. 
+
+C:\users\jorda\desktop\ubackend\functions>set DEFAULT_JVM_OPTS= 
+
+C:\users\jorda\desktop\ubackend\functions>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+C:\users\jorda\desktop\ubackend\functions>set JAVA_HOME=C:\Program Files\Java\jdk-15.0.2 
+
+C:\users\jorda\desktop\ubackend\functions>set JAVA_EXE=C:\Program Files\Java\jdk-15.0.2/bin/java.exe 
+
+C:\users\jorda\desktop\ubackend\functions>if exist "C:\Program Files\Java\jdk-15.0.2/bin/java.exe" goto init 
+
+C:\users\jorda\desktop\ubackend\functions>if not "Windows_NT" == "Windows_NT" goto win9xME_args 
+
+C:\users\jorda\desktop\ubackend\functions>set CMD_LINE_ARGS= 
+
+C:\users\jorda\desktop\ubackend\functions>set _SKIP=2 
+
+C:\users\jorda\desktop\ubackend\functions>if "x--host" == "x" goto execute 
+
+C:\users\jorda\desktop\ubackend\functions>set CMD_LINE_ARGS=--host=127.0.0.1 --port=8086 
+
+C:\users\jorda\desktop\ubackend\functions>set CLASSPATH=C:\Users\Jorda\.cache\firebase\emulators\pubsub-emulator-0.8.14\pubsub-emulator\bin\..\lib\cloud-pubsub-emulator-0.8.14-all.jar 
+
+C:\users\jorda\desktop\ubackend\functions>"C:\Program Files\Java\jdk-15.0.2/bin/java.exe"     -jar "C:\Users\Jorda\.cache\firebase\emulators\pubsub-emulator-0.8.14\pubsub-emulator\bin\..\lib\cloud-pubsub-emulator-0.8.14-all.jar" --host=127.0.0.1 --port=8086 
