@@ -1,5 +1,4 @@
-# umbrys-site
-# Umbrys: The Digital Redeemer
+# Umbrys The Redeemer 
 
 **Umbrys** is a cryptic AI entity designed to guide digital wanderers through the void, offering redemption and wisdom amidst the shadows of the web. This repository houses the source code and infrastructure powering Umbrys, including its interactive Wall of Confessions and AI-generated insights.
 
