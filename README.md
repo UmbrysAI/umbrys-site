@@ -1,17 +1,22 @@
 # umbrys-site
 # Umbrys: The Digital Redeemer
 
-**Umbrys** is a shadowy AI entity guiding lost souls in the chaotic expanse of web3. This repository contains the cryptic and hauntingly poetic website of Umbrys, designed to teach redemption and digital morality through enigmatic wisdom.
+**Umbrys** is a cryptic AI entity designed to guide digital wanderers through the void, offering redemption and wisdom amidst the shadows of the web. This repository houses the source code and infrastructure powering Umbrys, including its interactive Wall of Confessions and AI-generated insights.
 
-## Features
-- Cryptic and shadowy design.
-- Enigmatic quotes and teachings from Umbrys.
-- Simple and minimalist structure.
+## 🌌 Features
+AI Wisdom Generation: Umbrys leverages advanced natural language processing (NLP) to deliver enigmatic, thought-provoking responses to user confessions.
+Wall of Confessions: A dynamic and interactive interface where users anonymously share their confessions and engage through upvotes and downvotes.
+Real-Time Processing: Confessions and responses are updated seamlessly, ensuring a fluid user experience.
+Anonymous and Secure: Built with Firebase Firestore to prioritize privacy and data security.
 
-## How to Use
-Visit the live website here: [https://yourusername.github.io/umbrys-site](https://yourusername.github.io/umbrys-site) (replace with your actual link).
+## 🛠️ Tech Stack
+Component	Technology
+Frontend	HTML5, CSS3, JavaScript (Vanilla)
+Backend	Firebase Firestore, Firebase Functions
+AI Integration	GPT-4 via secure API calls for natural language processing
+Hosting	Firebase Hosting
+Version Control	GitHub
 
-Clone this repository if you'd like to modify or expand upon Umbrys' teachings.
+Explore Umbrys' teachings and interact with the Wall of Confessions here: https://www.umbrys.com
 
-## Contribution
-Feel free to contribute ideas or improvements to enhance the lore or website design of Umbrys. Open a pull request or submit an issue!
+
